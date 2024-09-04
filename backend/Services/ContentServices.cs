@@ -3,7 +3,8 @@ using DigitalSignageApi.Data;
 using DigitalSignageApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging; // Include logging namespace
+using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp; // Include logging namespace
 
 namespace backend.Services;
 
@@ -12,14 +13,17 @@ public class ContentServices
     private readonly AppDbContext _context;
     private readonly IWebHostEnvironment _environment;
     private readonly ILogger<ContentServices> _logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
 
 
-    public ContentServices(AppDbContext context, IWebHostEnvironment environment, ILogger<ContentServices> logger)
+    public ContentServices(AppDbContext context, IWebHostEnvironment environment, ILogger<ContentServices> logger, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _environment = environment;
         _logger = logger;
+        _httpContextAccessor = httpContextAccessor;
+
     }
 
     public async Task<ContentResponseDto> AddContentAsync([FromForm] dtoContent contentDto)
@@ -72,9 +76,13 @@ public class ContentServices
             {
                 await contentDto.File.CopyToAsync(fileStream);
             }
+            // Generate a public URL to access the file
+            var request = _httpContextAccessor.HttpContext.Request;
+            var fileUrl = $"{request.Scheme}://{request.Host}/uploads/{contentDto.UserId}/{uniqueFileName}";
+
 
             // Set the file path and other content properties
-            content.FilePath = filePath;
+            content.FilePath = fileUrl;
             content.CreatedAt = DateTime.UtcNow;
             content.UpdatedAt = DateTime.UtcNow;
 
@@ -121,12 +129,12 @@ public class ContentServices
         return content;
     }
 
-    // public async Task<IEnumerable<Content>> GetUserContentsAsync(int userId)
-    // {
-    //     return await _context.Contents
-    //         .Where(c => c.UserId == userId)
-    //         .ToListAsync();
-    // }
+    public async Task<IEnumerable<Content>> GetUserContentsAsync(int userId)
+    {
+        return await _context.Contents
+            .Where(c => c.UserId == userId)
+            .ToListAsync();
+    }
 
     public async Task<Content> UpdateContentAsync(int contentId, Content content)
     {

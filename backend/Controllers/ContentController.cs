@@ -16,28 +16,15 @@ namespace backend.Controllers
             _contentServices = contentServices;
         }
 
-        // [HttpGet("{userId}")]
-        // public async Task<ActionResult<IEnumerable<dtoContent>>> GetUserContents(int userId)
-        // {
-        //     var contents = await _contentServices.GetUserContentsAsync(userId);
-        //
-        //     // Map Content model to ContentDto
-        //     // var contentDtos = contents.Select(c => new dtoContent
-        //     // {
-        //     //     ContentId = c.ContentId,
-        //     //     UserId = c.UserId,
-        //     //     Type = c.Type,
-        //     //     Title = c.Title,
-        //     //     Description = c.Description,
-        //     //     StartTime = c.StartTime,
-        //     //     EndTime = c.EndTime,
-        //     //     CreatedAt = c.CreatedAt,
-        //     //     UpdatedAt = c.UpdatedAt,
-        //     //     FilePath = c.FilePath
-        //     // });
-        //
-        //     // return Ok(contentDtos);
-        // }
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<dtoContent>>> GetUserContents(int userId)
+        {
+            var contents = await _contentServices.GetUserContentsAsync(userId);
+        
+          
+        
+       return Ok(contents);
+         }
 
         [HttpPost]
         public async Task<ActionResult<dtoContent>> AddContent([FromForm] dtoContent contentDto)

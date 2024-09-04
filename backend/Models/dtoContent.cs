@@ -22,10 +22,9 @@ namespace backend.Models
         public DateTime? StartTime { get; set; }
 
         public DateTime? EndTime { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } 
+        public DateTime UpdatedAt { get; set; } 
+        
 
        // public string FilePath { get; set; }
         public IFormFile File { get; set; }
