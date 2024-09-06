@@ -17,7 +17,8 @@ public class ContentServices
 
 
 
-    public ContentServices(AppDbContext context, IWebHostEnvironment environment, ILogger<ContentServices> logger, IHttpContextAccessor httpContextAccessor)
+    public ContentServices(AppDbContext context, IWebHostEnvironment environment, ILogger<ContentServices> logger,
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _environment = environment;
@@ -76,6 +77,7 @@ public class ContentServices
             {
                 await contentDto.File.CopyToAsync(fileStream);
             }
+
             // Generate a public URL to access the file
             var request = _httpContextAccessor.HttpContext.Request;
             var fileUrl = $"{request.Scheme}://{request.Host}/uploads/{contentDto.UserId}/{uniqueFileName}";
@@ -96,7 +98,7 @@ public class ContentServices
                 Title = content.Title,
                 Type = content.Type,
                 Description = content.Description,
-                File = content.File,
+                //File = content.File,
                 StartTime = content.StartTime,
                 EndTime = content.EndTime,
                 CreatedAt = content.CreatedAt
@@ -136,43 +138,9 @@ public class ContentServices
             .ToListAsync();
     }
 
-    public async Task<Content> UpdateContentAsync(int contentId, Content content)
-    {
-        var _content = await _context.Contents.FindAsync(contentId);
-        if (_content == null)
-        {
-            return null;
-        }
+//     public async Task<Content> UpdateContentAsync(int contentId, Content content)
+//     {
+//        
+//         
 
-        // Delete the existing file if a new file is uploaded
-        if (content.File != null)
-        {
-            if (File.Exists(_content.FilePath))
-            {
-                File.Delete(_content.FilePath);
-            }
-
-            // Generate a unique file name
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(content.File.FileName);
-            var filePath = Path.Combine("uploads", content.UserId.ToString(), uniqueFileName);
-
-            // Save the file to the specified path
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await content.File.CopyToAsync(fileStream);
-            }
-
-            _content.FilePath = filePath;
-        }
-
-        _content.Title = content.Title;
-        _content.Type = content.Type;
-        _content.Description = content.Description;
-        _content.StartTime = content.StartTime;
-        _content.EndTime = content.EndTime;
-        _content.UpdatedAt = DateTime.UtcNow;
-
-        await _context.SaveChangesAsync();
-        return _content;
-    }
 }

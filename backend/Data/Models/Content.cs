@@ -41,7 +41,7 @@ namespace DigitalSignageApi.Models
         [IgnoreDataMember]
         public virtual User User { get; set; }
 
-        [NotMapped]
-        public IFormFile File { get; set; }
+        // [NotMapped]
+        // public IFormFile File { get; set; }
     }
 }
