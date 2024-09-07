@@ -108,32 +108,17 @@ namespace backend.Controllers
         //     return Ok(updatedContentDto);
         // }
 
-        // [HttpDelete("{contentId}")]
-        // public async Task<ActionResult<dtoContent>> DeleteContent(int contentId)
-        // {
-        //     var deletedContent = await _contentServices.RemoveContentAsync(contentId);
-        //
-        //     if (deletedContent == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     // Map deleted Content to DTO
-        //     var deletedContentDto = new dtoContent
-        //     {
-        //         ContentId = deletedContent.ContentId,
-        //         UserId = deletedContent.UserId,
-        //         Type = deletedContent.Type,
-        //         Title = deletedContent.Title,
-        //         Description = deletedContent.Description,
-        //         StartTime = deletedContent.StartTime,
-        //         EndTime = deletedContent.EndTime,
-        //         CreatedAt = deletedContent.CreatedAt,
-        //         UpdatedAt = deletedContent.UpdatedAt,
-        //         FilePath = deletedContent.FilePath
-        //     };
-        //
-        //     return Ok(deletedContentDto);
-        // }
+         [HttpDelete("{contentId}")]
+        public async Task<ActionResult<dtoContent>> DeleteContent(int contentId)
+        {
+            var deletedContent = await _contentServices.RemoveContentAsync(contentId);
+        
+            if (deletedContent == null)
+            {
+                return NotFound();
+            }
+        
+            return Ok(deletedContent);
+        }
     }
 }
