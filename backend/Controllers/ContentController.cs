@@ -67,46 +67,22 @@ namespace backend.Controllers
             return BadRequest();
         }
 
-        // [HttpPut("{contentId}")]
-        // public async Task<ActionResult<dtoContent>> UpdateContent(int contentId, [FromForm] dtoContent contentDto, [FromForm] IFormFile? file)
-        // {
-        //     // Map ContentDto to Content model
-        //     var content = new Content
-        //     {
-        //         ContentId = contentId,
-        //         UserId = contentDto.UserId,
-        //         Type = contentDto.Type,
-        //         Title = contentDto.Title,
-        //         Description = contentDto.Description,
-        //         StartTime = contentDto.StartTime,
-        //         EndTime = contentDto.EndTime,
-        //         File = file // Handle file separately
-        //     };
-        //
-        //     var updatedContent = await _contentServices.UpdateContentAsync(contentId, content);
-        //
-        //     if (updatedContent == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     // Map back to DTO
-        //     var updatedContentDto = new dtoContent
-        //     {
-        //         ContentId = updatedContent.ContentId,
-        //         UserId = updatedContent.UserId,
-        //         Type = updatedContent.Type,
-        //         Title = updatedContent.Title,
-        //         Description = updatedContent.Description,
-        //         StartTime = updatedContent.StartTime,
-        //         EndTime = updatedContent.EndTime,
-        //         CreatedAt = updatedContent.CreatedAt,
-        //         UpdatedAt = updatedContent.UpdatedAt,
-        //         FilePath = updatedContent.FilePath
-        //     };
-        //
-        //     return Ok(updatedContentDto);
-        // }
+        [HttpPut("{contentId}")]
+        public async Task<ActionResult<dtoContent>> UpdateContent(int contentId, [FromForm] dtoContent contentDto)
+        {
+            if (contentDto == null)
+            {
+                return BadRequest("Content data is required.");
+            }
+            var updatedContent = await _contentServices.UpdateContentAsync(contentId, contentDto);
+
+            if (updatedContent == null)
+            {
+                return NotFound($"Content with ID {contentId} not found.");
+            }
+
+            return Ok(updatedContent);
+        }
 
          [HttpDelete("{contentId}")]
         public async Task<ActionResult<dtoContent>> DeleteContent(int contentId)
