@@ -33,5 +33,6 @@ namespace DigitalSignageApi.Models
         public ICollection<Content> Contents { get; set; }
         public ICollection<Screen> Screens { get; set; }
         public ICollection<ScreenList> ScreenLists { get; set; }
+        public ICollection<ScreenTag> ScreenTags { get; set; }
     }
 }
