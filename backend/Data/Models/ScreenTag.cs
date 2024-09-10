@@ -15,7 +15,7 @@ namespace DigitalSignageApi.Models
         public required string TagName { get; set; }
         
         // Navigation property
-        public required Screen Screen { get; set; }
+        public  Screen Screen { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
         public virtual User User { get; set; }
