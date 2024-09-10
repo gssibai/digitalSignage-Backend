@@ -51,7 +51,9 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<ContentServices>();
+builder.Services.AddScoped<IScreenService, ScreenService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
