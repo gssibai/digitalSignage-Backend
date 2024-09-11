@@ -12,7 +12,7 @@ namespace DigitalSignageApi.Models
         User,
         Admin
     };
-    public class User 
+    public class User : IdentityUser
     {
         [Key]
         public int UserId { get; set; }
