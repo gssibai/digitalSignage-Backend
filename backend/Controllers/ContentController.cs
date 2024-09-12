@@ -1,6 +1,7 @@
 using backend.Models;
 using backend.Services;
 using DigitalSignageApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -8,6 +9,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ContentController : ControllerBase
     {
         private readonly ContentServices _contentServices;

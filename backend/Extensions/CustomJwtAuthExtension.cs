@@ -30,11 +30,11 @@ public static class CustomJwtAuthExtension
             });
     }
 
-    public static void AddSwaggerGenAuth(this IServiceCollection services)
+    public static void AddSwaggerGenJwtAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(o =>
         {
-            o.SwaggerDoc("V1", new OpenApiInfo()
+            o.SwaggerDoc("v1", new OpenApiInfo()
             {
                 Version = "v1",
                 Title = "DigitalSignage",
