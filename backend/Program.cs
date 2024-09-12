@@ -1,6 +1,7 @@
 using System.Configuration;
 using System.Text;
 using backend.Extensions;
+using backend.Interfaces;
 using backend.Services;
 using DigitalSignageApi.Data;
 using DigitalSignageApi.Models;
@@ -26,6 +27,7 @@ builder.Services.AddAuthentication();
 //builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddScoped<ContentServices>();
 builder.Services.AddScoped<IScreenService, ScreenService>();
+builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 

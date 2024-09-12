@@ -8,39 +8,60 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services;
 
-public class UserService 
-    {
-        public UserService(UserManager<User> userManager)
+public class UserServices : IUserService
+{
+        private readonly AppDbContext _context;
+
+
+        public UserServices(AppDbContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
-        private readonly UserManager<User> _userManager;
 
         public async Task<UserDto> RegisterUserAsync(NewUserDto userDto)
         {
            // user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-           var user = new User
+           try
            {
-               Email = userDto.Email,
-               Name = userDto.Name,
-               Surname = userDto.Surname,
-              // PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password)
-              PasswordHash = userDto.Password,
-              Role = "User"
-           };
-           IdentityResult registerResult = await _userManager.CreateAsync(user, userDto.Password);
+               var user = new User
+               {
+                   Email = userDto.Email,
+                   Name = userDto.Name,
+                   Surname = userDto.Surname,
+                   PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
+                  // PasswordHash = userDto.Password,
+                   Role = "User"
+               };
+               await _context.Users.AddAsync(user);
+               await _context.SaveChangesAsync();
+               return new UserDto()
+               {
+                   Email = user.Email,
+                   Name = user.Name,
+                   Surname = user.Surname,
+                   UserId = user.UserId
+               };
+           }
+           catch (Exception ex)
+           {
+               throw new ApplicationException("An error occurred while registering the user.", ex);
 
-           return new UserDto()
-           {
-               Email = user.Email,
-               Name = user.Name,
-               Surname = user.Surname,
-               Password = user.PasswordHash,
-               UserId = user.UserId
-           };
+           }
         }
-      
 
-       
-    }
+        public Task<bool> DeleteUserAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> GetUserByIdAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateUserAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+}
     

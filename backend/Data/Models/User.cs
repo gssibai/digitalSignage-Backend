@@ -27,8 +27,7 @@ namespace DigitalSignageApi.Models
 
         [MaxLength(50)]
         public required string Surname { get; set; }
-
-        [MaxLength(50)]
+        
         public required string PasswordHash { get; set; }
 
         [EnumDataType(typeof(Role))]
