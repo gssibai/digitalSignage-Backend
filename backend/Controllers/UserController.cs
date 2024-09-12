@@ -30,5 +30,16 @@ namespace backend.Controllers
             var registerResponse = await _userService.RegisterUserAsync(userDto);
             return Ok(registerResponse);
         }
+        
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+                var token = await _userService.LoginUserAsync(loginUserDto);
+                return Ok(new { Token = token });
+            
+           
+           
+        }
     }
 }
