@@ -23,7 +23,7 @@ namespace backend.Controllers
        }
 
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<ActionResult<UserDto>> RegisterNewUser(NewUserDto userDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -37,9 +37,23 @@ namespace backend.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
                 var token = await _userService.LoginUserAsync(loginUserDto);
                 return Ok(new { Token = token });
-            
-           
-           
+        }
+        
+        [HttpPut("id")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto updateUserDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var updateResponse = await _userService.UpdateUserAsync(id, updateUserDto);
+            return Ok(updateResponse);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var deleteResponse = await _userService.DeleteUserAsync(id);
+            if (deleteResponse) return Ok(deleteResponse);
+            return BadRequest("User not found");
         }
     }
 }

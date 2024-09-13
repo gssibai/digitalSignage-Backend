@@ -9,8 +9,8 @@ namespace backend.Interfaces
         Task<UserDto> RegisterUserAsync(NewUserDto userDto);
         Task<string> LoginUserAsync(LoginUserDto loginUserDto);
             Task<bool> DeleteUserAsync(int userId);
-            Task<bool> UpdateUserAsync(User user);
-         
-        
+          Task<UserDto> UpdateUserAsync(int UserId, UpdateUserDto userDto);
+
+
     }
 }

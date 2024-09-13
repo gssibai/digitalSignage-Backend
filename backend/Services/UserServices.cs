@@ -96,16 +96,37 @@ public class UserServices : IUserService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Task<bool> DeleteUserAsync(int userId)
+        public async Task<bool> DeleteUserAsync(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            if (user == null) return false;
+             _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
        
 
-        public Task<bool> UpdateUserAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
+            public async Task<UserDto> UpdateUserAsync(int UserId, UpdateUserDto userDto)
+            {
+                var user = await _context.Users.FindAsync(UserId);
+                if(user == null)
+                     throw new ApplicationException("User not found.");
+                
+                user.Email = userDto.Email ?? user.Email;
+                user.Name = userDto.Name ?? user.Name;
+                user.Surname = userDto.Surname ?? user.Surname;
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password) ?? user.PasswordHash;
+                user.UpdatedAt = DateTime.Now;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                return new UserDto()
+                {
+                    Email = user.Email,
+                    Name = user.Name,
+                    Surname = user.Surname
+                };
+            }
 }
     
