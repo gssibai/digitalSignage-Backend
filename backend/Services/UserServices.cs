@@ -59,13 +59,13 @@ public class UserServices : IUserService
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginUserDto.Email);
             if (user == null)
             {
-                throw new UnauthorizedAccessException("Invalid credentials.");
+               return ("Invalid credentials.");
             }
 
             // Verify the password
             if (!BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.PasswordHash))
             {
-                throw new UnauthorizedAccessException("Invalid credentials.");
+                return("Invalid credentials.");
             }
 
             // Generate JWT token
@@ -127,6 +127,24 @@ public class UserServices : IUserService
                     Name = user.Name,
                     Surname = user.Surname
                 };
+            }
+            
+            public async Task<bool> ResetPasswordAsync(int userId, string newPassword)
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    throw new ApplicationException("User not found.");
+                }
+
+                // Hash the new password
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                user.UpdatedAt = DateTime.Now;
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                return true;
             }
 }
     

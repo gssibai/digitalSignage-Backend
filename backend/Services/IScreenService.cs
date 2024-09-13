@@ -13,4 +13,5 @@ public interface IScreenService
     bool RemoveUserFromScreen(int screenId, int userId);
     string GenerateUniqueCode();
     bool ConnectUserToScreen(int userId, string code);
+    IEnumerable<ScreenDTO> GetAllScreensByUserId(int userId);
 }

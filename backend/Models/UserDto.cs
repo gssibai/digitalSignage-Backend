@@ -38,3 +38,7 @@ public class UpdateUserDto
     public string? Surname { get; set; }
     public string? Password { get; set; }
 }
+public class ResetPasswordDto
+{
+    public string NewPassword { get; set; }
+}

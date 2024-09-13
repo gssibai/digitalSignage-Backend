@@ -11,6 +11,6 @@ namespace backend.Interfaces
             Task<bool> DeleteUserAsync(int userId);
           Task<UserDto> UpdateUserAsync(int UserId, UpdateUserDto userDto);
 
-
+          Task<bool> ResetPasswordAsync(int userId, string newPassword);
     }
 }

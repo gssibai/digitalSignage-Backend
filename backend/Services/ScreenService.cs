@@ -29,6 +29,19 @@ public class ScreenService : IScreenService
             .ToList();
     }
 
+    public IEnumerable<ScreenDTO> GetAllScreensByUserId(int userId)
+    {
+        return _context.UserScreens
+            .Where(us => us.UserId == userId)
+            .Select(us => new ScreenDTO
+            {
+                ScreenId = us.Screen.ScreenId,
+                ScreenName = us.Screen.ScreenName,
+                Location = us.Screen.Location
+            })
+            .ToList();
+    }
+
     public ScreenDTO GetScreenById(int screenId)
     {
         var screen = _context.Screens.Find(screenId);
@@ -92,33 +105,7 @@ public class ScreenService : IScreenService
         };
     }
 
-    // public void DeleteScreen(int screenId)
-    // {
-    //     var screen = _context.Screens.Find(screenId);
-    //     if (screen == null) throw new KeyNotFoundException("Screen not found");
-    //
-    //     _context.Screens.Remove(screen);
-    //     _context.SaveChanges();
-    // }
-
-    // public void AssignUserToScreen(int screenId, int userId)
-    // {
-    //     if (!_context.Users.Any(u => u.UserId == userId))
-    //         throw new KeyNotFoundException("User not found");
-    //
-    //     if (!_context.Screens.Any(s => s.ScreenId == screenId))
-    //         throw new KeyNotFoundException("Screen not found");
-    //
-    //     var userScreen = new UserScreen
-    //     {
-    //         UserId = userId,
-    //         ScreenId = screenId
-    //     };
-    //
-    //     _context.UserScreens.Add(userScreen);
-    //     _context.SaveChanges();
-    // }
-
+   
     public bool RemoveUserFromScreen(int userId, int screenId)
     {
         // Find the UserScreen entry that matches the userId and screenId
