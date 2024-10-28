@@ -45,4 +45,12 @@ namespace backend.Models
         public DateTime UpdatedAt { get; set; }
         
     }
+
+    public class AssignAsstetsDto
+    {
+        public int ScreenId { get; set; }
+        public List<int> ContentIds { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? ExpiresAt { get; set; }
+    }
 }

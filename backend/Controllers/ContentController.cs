@@ -9,7 +9,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+  //  [Authorize]
     public class ContentController : ControllerBase
     {
         private readonly ContentServices _contentServices;
@@ -40,6 +40,29 @@ namespace backend.Controllers
             return BadRequest();
         }
 
+       [HttpPost("assign")]
+       public async Task<IActionResult> AssignAssets([FromBody] AssignAsstetsDto request)
+       {
+           if (request.ContentIds == null || !request.ContentIds.Any())
+           {
+               return BadRequest("No content ids provided");
+           }
+
+           var assignedContentIds = await _contentServices.AssignAssetsAsync(request);
+           return Ok( new {AssignedContentIds =  assignedContentIds});
+       }
+
+       [HttpGet("assigned-contents/{screenId}")]
+       public async Task<IActionResult> GetAssignedContents(int screenId)
+       {
+           var contentsId = _contentServices.GetAssignedContentIdsAsync(screenId);
+           if (!contentsId.Result.Any())
+           {
+               return NotFound("No content ids provided");
+           }
+           return Ok(contentsId);
+       } 
+       
         [HttpPut("{contentId}")]
         public async Task<ActionResult<dtoContent>> UpdateContent(int contentId, [FromForm] dtoContent contentDto)
         {

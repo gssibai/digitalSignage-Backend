@@ -1,9 +1,12 @@
+using backend.Data.Models;
 using backend.Models;
 using DigitalSignageApi.Data;
 using DigitalSignageApi.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NuGet.ContentModel;
 using Org.BouncyCastle.Asn1.Ocsp; // Include logging namespace
 
 namespace backend.Services;
@@ -106,6 +109,35 @@ public class ContentServices
         return await _context.Contents
             .Where(c => c.UserId == userId)
             .ToListAsync();
+    }
+
+    // {{{{ AssignAssets }}}
+    // No Fetching Content Details:
+    // The function only assigns content IDs to the screen and returns them as a list. This ensures minimal processing.
+    // Batch Insert for Efficiency:
+    // The AddRange method is used to insert all assignments in a single database call, improving performance.
+    // Simple Response:
+    // The function only returns content IDs. The TV app can use this list to query the actual content data (e.g., via a GET request).
+    public async Task<List<int>> AssignAssetsAsync(AssignAsstetsDto request )
+    {
+        var assignments = request.ContentIds.Select(contentId => new AssetAssignment
+        {
+            ContentId = contentId,
+            ScreenId = request.ScreenId,
+            StartDate = request.StartDate,
+            ExpiresAt = request.ExpiresAt
+        }).ToList();
+        _context.AssetAssignments.AddRange(assignments);
+        await _context.SaveChangesAsync();
+        return request.ContentIds;
+    }
+
+    public async Task<List<int>> GetAssignedContentIdsAsync(int screenId)
+    {
+        var contentIds = await _context.AssetAssignments
+            .Where(a => a.ScreenId == screenId && (a.ExpiresAt == null || a.ExpiresAt > DateTime.UtcNow))
+            .Select(a => a.ContentId).ToListAsync();
+        return contentIds;
     }
 
     public async Task<ContentResponseDto> UpdateContentAsync(int contentId, [FromForm] dtoContent contentDto)

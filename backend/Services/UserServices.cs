@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,6 +22,34 @@ public class UserServices : IUserService
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        public IEnumerable<UserDto> GetUsersAsync()
+        {
+            return _context.Users.Select(u => new UserDto
+            {
+                UserId = u.UserId,
+                Email = u.Email,
+                Name = u.Name,
+                Surname = u.Surname
+            }).ToList();
+        }
+
+        public UserDto GetUserById(int userId)
+        {
+           var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+           if (user == null)
+           {
+               return null;
+           }
+
+           return new UserDto()
+           {
+               UserId = user.UserId,
+               Name = user.Name,
+               Surname = user.Surname,
+               Email = user.Email
+           };
         }
 
         public async Task<UserDto> RegisterUserAsync(NewUserDto userDto)

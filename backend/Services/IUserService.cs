@@ -1,3 +1,4 @@
+using System.Collections;
 using backend.Models;
 using DigitalSignageApi.Models;
 
@@ -12,5 +13,7 @@ namespace backend.Interfaces
           Task<UserDto> UpdateUserAsync(int UserId, UpdateUserDto userDto);
 
           Task<bool> ResetPasswordAsync(int userId, string newPassword);
+          IEnumerable<UserDto> GetUsersAsync();
+          UserDto GetUserById(int userId);
     }
 }

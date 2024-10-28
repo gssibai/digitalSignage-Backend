@@ -82,6 +82,14 @@ public class ScreenService : IScreenService
         };
     }
 
+    public string GetConnectionCode(int screenId)
+    {
+        var screen = _context.Screens.Find(screenId);
+        if (screen == null)
+            throw new Exception($"Screen with id {screenId} not found");
+        return screen.ConnectionCode;
+    }
+
 
     public ScreenDTO UpdateScreen(int screenId, UpdateScreenDTO screenDto)
     {

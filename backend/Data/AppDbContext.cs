@@ -17,6 +17,7 @@ namespace DigitalSignageApi.Data
         public DbSet<ScreenTag> ScreenTags { get; set; }
         public DbSet<ScreenList> ScreenLists { get; set; }
         public DbSet<ScreenListScreen> ScreenListScreens { get; set; }
+        public DbSet<AssetAssignment> AssetAssignments { get; set; }
 
         public DbSet<UserScreen> UserScreens { get; set; }
        

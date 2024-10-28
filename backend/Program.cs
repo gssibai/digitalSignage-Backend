@@ -31,12 +31,13 @@ builder.Services.AddScoped<IScreenService, ScreenService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
-
+builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if ( app.Environment.IsDevelopment())
 {
+    app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
     app.UseSwagger();
     app.UseSwaggerUI();
 }

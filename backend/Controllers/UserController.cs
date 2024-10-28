@@ -22,7 +22,27 @@ namespace backend.Controllers
            _userService = userService;
        }
 
+       [HttpGet]
+       public ActionResult<IEnumerable<UserDto>> GetUsers()
+       {
+           var allUsers = _userService.GetUsersAsync();
+           if (ModelState.IsValid)
+           {
+               return Ok(allUsers);
+           }
 
+           return BadRequest(allUsers);
+       }
+
+       [HttpGet("{id}")]
+       public ActionResult<UserDto> GetUser(int id)
+       {
+           var user = _userService.GetUserById(id);
+           if(user == null)
+               return NotFound();
+           return Ok(user);
+       }
+       
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDto>> RegisterNewUser(NewUserDto userDto)
@@ -43,7 +63,8 @@ namespace backend.Controllers
         }
         
         [HttpPut("id")]
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto updateUserDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

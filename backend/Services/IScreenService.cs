@@ -14,4 +14,6 @@ public interface IScreenService
     string GenerateUniqueCode();
     bool ConnectUserToScreen(int userId, string code);
     IEnumerable<ScreenDTO> GetAllScreensByUserId(int userId);
+    
+    string GetConnectionCode(int screenId);
 }
